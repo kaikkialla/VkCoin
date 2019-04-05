@@ -13,9 +13,8 @@ import io.reactivex.subjects.BehaviorSubject;
 
 public class BalanceRepository {
     private static Context context;
-
-
     private static volatile BalanceRepository instance;
+
     public static BalanceRepository getInstance(Context c) {
         context = c;
         BalanceRepository localInstance = instance;
@@ -31,7 +30,6 @@ public class BalanceRepository {
     }
 
 
-    private BehaviorSubject<Float> balance = BehaviorSubject.create();
 
 
     private SharedPreferences balanceSP = context.getSharedPreferences("balance", Context.MODE_PRIVATE);
@@ -44,8 +42,7 @@ public class BalanceRepository {
     private SharedPreferences.Editor clickincrementeditor = clickincrement.edit();
 
 
-
-
+    private BehaviorSubject<Float> balance = BehaviorSubject.create();
     public Observable<Float> getBalance() {
         return balance;
     }
@@ -55,7 +52,9 @@ public class BalanceRepository {
         final Handler handler = new Handler();
         final Runnable Update = () -> {
             float newbalance = balanceSP.getFloat("balance", 0) + bgincrement.getFloat("bg", 0);
-            balanceSPeditor.putFloat("balance", newbalance).apply();
+            balanceSPeditor
+                    .putFloat("balance", newbalance)
+                    .apply();
             balance.onNext(balanceSP.getFloat("balance", 0f));
         };
         Timer swipeTimer = new Timer();
@@ -69,17 +68,23 @@ public class BalanceRepository {
 
 
     public void click() {
-        float newbalance =  (float) balanceSP.getFloat("balance", 0f) + clickincrement.getFloat("click", 0);
-        balanceSPeditor.putFloat("balance", newbalance).apply();
+        float newbalance = balanceSP.getFloat("balance", 0) + clickincrement.getFloat("click", 0);
+        balanceSPeditor
+                .putFloat("balance", newbalance)
+                .apply();
         balance.onNext(balanceSP.getFloat("balance", 0f));
     }
 
 
     public void increaseBg(float difference) {
-        bgincrementeditor.putFloat("bg", bgincrement.getFloat("bg", 0) + difference).apply();
+        bgincrementeditor
+                .putFloat("bg", bgincrement.getFloat("bg", 0) + difference)
+                .apply();
     }
 
     public void increaseClick(float difference) {
-        clickincrementeditor.putFloat("click", clickincrement.getFloat("click", 0) + difference).apply();
+        clickincrementeditor
+                .putFloat("click", clickincrement.getFloat("click", 0) + difference)
+                .apply();
     }
 }

@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         if(savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new CoinFragment()).commit();
         }
+
         SharedPreferences firstLogin = getApplicationContext().getSharedPreferences("login", MODE_PRIVATE);
         Boolean login = firstLogin.getBoolean("login", false);
         if(login == false) {
@@ -30,6 +31,5 @@ public class MainActivity extends AppCompatActivity {
             BalanceRepository.getInstance(getApplicationContext()).increaseBg(0.001f);
             BalanceRepository.getInstance(getApplicationContext()).increaseClick(0.05f);
         }
-        Log.e("fadada", String.valueOf(login));
     }
 }
