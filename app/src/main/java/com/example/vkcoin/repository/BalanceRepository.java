@@ -3,6 +3,7 @@ package com.example.vkcoin.repository;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.util.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -30,22 +31,32 @@ public class BalanceRepository {
     }
 
 
-    private BehaviorSubject<Long> balance = BehaviorSubject.create();
+    private BehaviorSubject<Float> balance = BehaviorSubject.create();
+
 
     private SharedPreferences balanceSP = context.getSharedPreferences("balance", Context.MODE_PRIVATE);
     private SharedPreferences.Editor balanceSPeditor = balanceSP.edit();
 
-    public Observable<Long> getBalance() {
+    private SharedPreferences bgincrement = context.getSharedPreferences("bg", Context.MODE_PRIVATE);
+    private SharedPreferences.Editor bgincrementeditor = bgincrement.edit();
+
+    private SharedPreferences clickincrement = context.getSharedPreferences("click", Context.MODE_PRIVATE);
+    private SharedPreferences.Editor clickincrementeditor = clickincrement.edit();
+
+
+
+
+    public Observable<Float> getBalance() {
         return balance;
     }
 
 
-    public void resumeBalance() {
+    public void start() {
         final Handler handler = new Handler();
         final Runnable Update = () -> {
-            long newbalance = balanceSP.getLong("balance", 0) + 1;
-            balanceSPeditor.putLong("balance", newbalance).apply();
-            balance.onNext(balanceSP.getLong("balance", 0));
+            float newbalance = balanceSP.getFloat("balance", 0) + bgincrement.getFloat("bg", 0);
+            balanceSPeditor.putFloat("balance", newbalance).apply();
+            balance.onNext(balanceSP.getFloat("balance", 0f));
         };
         Timer swipeTimer = new Timer();
         swipeTimer.schedule(new TimerTask() {
@@ -56,13 +67,19 @@ public class BalanceRepository {
         }, 1000, 1000);
     }
 
-    public void  pauseBalance() {
-        //Прекратить увеличение баланса, а мб и нет
-    }
 
     public void click() {
-        long newbalance = balanceSP.getLong("balance", 0) + 10;
-        balanceSPeditor.putLong("balance", newbalance).apply();
-        balance.onNext(balanceSP.getLong("balance", 0));
+        float newbalance =  (float) balanceSP.getFloat("balance", 0f) + clickincrement.getFloat("click", 0);
+        balanceSPeditor.putFloat("balance", newbalance).apply();
+        balance.onNext(balanceSP.getFloat("balance", 0f));
+    }
+
+
+    public void increaseBg(float difference) {
+        bgincrementeditor.putFloat("bg", bgincrement.getFloat("bg", 0) + difference).apply();
+    }
+
+    public void increaseClick(float difference) {
+        clickincrementeditor.putFloat("click", clickincrement.getFloat("click", 0) + difference).apply();
     }
 }

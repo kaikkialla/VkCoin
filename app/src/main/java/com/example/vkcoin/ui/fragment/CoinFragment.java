@@ -25,6 +25,10 @@ public class CoinFragment extends Fragment {
     Button mClick;
     viewmodel mViewmodel;
 
+
+
+
+
     //@Inject BalanceRepository repository;
 
     @Override
@@ -48,8 +52,25 @@ public class CoinFragment extends Fragment {
         mClick = view.findViewById(R.id.click);
         mViewmodel = ViewModelProviders.of(this).get(viewmodel.class);
 
+
+
+
         mClick.setOnClickListener(v -> {
             BalanceRepository.getInstance(getContext()).click();//сделать inject, заменить BalanceRepository.getInstance(getContext()) на repository
+        });
+
+
+
+
+        //test
+        Button testbg = view.findViewById(R.id.testbg);
+        Button testclick = view.findViewById(R.id.testclick);
+        //test
+        testbg.setOnClickListener(v -> {
+            BalanceRepository.getInstance(getContext()).increaseBg(0.01f);//сделать inject, заменить BalanceRepository.getInstance(getContext()) на repository
+        });
+        testclick.setOnClickListener(v -> {
+            BalanceRepository.getInstance(getContext()).increaseClick(0.05f);//сделать inject, заменить BalanceRepository.getInstance(getContext()) на repository
         });
     }
 
@@ -58,8 +79,7 @@ public class CoinFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mViewmodel.getBalance(getContext()).observe(getActivity(), balance -> mBalance.setText(String.valueOf(balance)));
-        //BalanceRepository.getInstance(getApplicationContext()).getBalance().observeOn(AndroidSchedulers.mainThread()).subscribe(balance -> mBalance.setText(String.valueOf(balance)));
+        mViewmodel.getBalance(getContext()).observe(getActivity(), balance -> mBalance.setText(String.format("%.3f", balance)));
     }
 
 }

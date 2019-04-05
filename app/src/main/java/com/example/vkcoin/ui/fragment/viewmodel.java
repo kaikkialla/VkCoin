@@ -10,12 +10,12 @@ import androidx.lifecycle.ViewModel;
 import io.reactivex.disposables.Disposable;
 
 public class viewmodel extends ViewModel {
-    private MutableLiveData<Long> balace = new MutableLiveData<>();
+    private MutableLiveData<Float> balace = new MutableLiveData<>();
     private Disposable mDisposable;
     Context context;
 
 
-    LiveData<Long> getBalance(Context context) {
+    LiveData<Float> getBalance(Context context) {
         this.context = context;
         subscribeBalance();
         return balace;
