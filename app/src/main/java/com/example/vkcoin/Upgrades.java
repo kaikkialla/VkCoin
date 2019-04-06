@@ -1,13 +1,13 @@
 package com.example.vkcoin;
 
-public class Bonus {
+public class Upgrades {
 
     private int id;
     private String name;
     private float price;
     private float gain;
 
-    public Bonus(int id, String name, float price, float gain) {
+    public Upgrades(int id, String name, float price, float gain) {
         this.id = id;
         this.name = name;
         this.price = price;

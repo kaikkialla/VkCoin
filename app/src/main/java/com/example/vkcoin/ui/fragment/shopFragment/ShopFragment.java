@@ -1,18 +1,13 @@
 package com.example.vkcoin.ui.fragment.shopFragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.vkcoin.Bonus;
 import com.example.vkcoin.R;
 import com.example.vkcoin.repository.BalanceRepository;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

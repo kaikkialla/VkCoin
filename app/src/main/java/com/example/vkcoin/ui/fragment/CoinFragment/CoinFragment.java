@@ -6,12 +6,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.vkcoin.Bonus;
 import com.example.vkcoin.MainApplication;
 import com.example.vkcoin.R;
 import com.example.vkcoin.repository.BalanceRepository;

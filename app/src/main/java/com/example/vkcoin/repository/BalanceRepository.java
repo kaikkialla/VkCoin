@@ -4,14 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 
-import com.example.vkcoin.Bonus;
+import com.example.vkcoin.Upgrades;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -46,7 +44,7 @@ public class BalanceRepository {
 
     private BehaviorSubject<Float> balance = BehaviorSubject.create();
     //private BehaviorSubject<List<Bonus>> modules = BehaviorSubject.create();
-    public List<Bonus> moduleslist = new ArrayList<>();
+    public List<Upgrades> moduleslist = new ArrayList<>();
 
     public Observable<Float> getBalance() {
         return balance;
@@ -55,11 +53,11 @@ public class BalanceRepository {
 //        return modules;
 //    }
 
-    public List<Bonus> getModules() {
+    public List<Upgrades> getModules() {
         Gson gson = new Gson();
-        String jsonText1 = modulesSp.getString("key", null);
-        Bonus[] text = gson.fromJson(jsonText1, Bonus[].class);
-        return new ArrayList<Bonus>(Arrays.asList(text));
+        String jsonText1 = modulesSp.getString("module", null);
+        Upgrades[] text = gson.fromJson(jsonText1, Upgrades[].class);
+        return new ArrayList<>(Arrays.asList(text));
     }
 
     public void start() {
@@ -115,14 +113,14 @@ public class BalanceRepository {
 
 
 
-    public void addmodule(Bonus bonus) {
+    public void addmodule(Upgrades bonus) {
         moduleslist.add(bonus);
 
         Gson gson = new Gson();
-        List<Bonus> textList = new ArrayList<>();
+        List<Upgrades> textList = new ArrayList<>();
         textList.addAll(moduleslist);
         String jsonText = gson.toJson(textList);
-        modulesSp.edit().putString("key", jsonText).apply();
+        modulesSp.edit().putString("module", jsonText).apply();
 
 //        String jsonText1 = modulesSp.getString("key", null);
 //        Bonus[] text = gson.fromJson(jsonText1, Bonus[].class);

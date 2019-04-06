@@ -1,13 +1,12 @@
 package com.example.vkcoin.ui.fragment.shopFragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.vkcoin.R;
-import com.example.vkcoin.Bonus;
+import com.example.vkcoin.Upgrades;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +15,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class shopAdapter extends RecyclerView.Adapter<shopAdapter.ViewHolder> {
-    private List<Bonus> bonuses = new ArrayList<>();
+    private List<Upgrades> bonuses = new ArrayList<>();
     FragmentActivity activity;
 
     public shopAdapter(FragmentActivity activity) {
@@ -37,7 +36,7 @@ public class shopAdapter extends RecyclerView.Adapter<shopAdapter.ViewHolder> {
         holder.name.setText(bonuses.get(position).getName());
 
         List<Integer> ids = new ArrayList<>();
-        for(Bonus bonus : bonuses) {
+        for(Upgrades bonus : bonuses) {
             ids.add(bonus.getid());
         }
         holder.gain.setText(String.valueOf(Collections.frequency(ids, bonuses.get(position).getid())));
@@ -50,7 +49,7 @@ public class shopAdapter extends RecyclerView.Adapter<shopAdapter.ViewHolder> {
     }
 
 
-    public void swap(List<Bonus> list) {
+    public void swap(List<Upgrades> list) {
         this.bonuses = list;
         notifyDataSetChanged();
     }
