@@ -4,10 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.vkcoin.R;
 import com.example.vkcoin.repository.BalanceRepository;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import org.w3c.dom.Text;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,9 +20,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ShopFragment extends BottomSheetDialogFragment {
 
-    private RecyclerView recyclerView;
-    viewmodel mViewmodel;
-    shopAdapter adapter;
+
+    TextView cpuname;
+    TextView cpuprice;
+    TextView cpugain;
+    TextView cpuquantity;
+
+    TextView servername;
+    TextView serverprice;
+    TextView servergain;
+    TextView serverquantity;
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -30,20 +42,21 @@ public class ShopFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        adapter = new shopAdapter(getActivity());
-        mViewmodel = ViewModelProviders.of(this).get(viewmodel.class);
+        cpuname = view.findViewById(R.id.cpuname);
+        cpuprice = view.findViewById(R.id.cpuprice);
+        cpugain = view.findViewById(R.id.cpugain);
+        cpuquantity = view.findViewById(R.id.cpuquantity);
 
-        recyclerView = view.findViewById(R.id.recyclerview);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-
+        servername = view.findViewById(R.id.servername);
+        serverprice = view.findViewById(R.id.serverprice);
+        servergain = view.findViewById(R.id.servergain);
+        serverquantity = view.findViewById(R.id.serverquantity);
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //mViewmodel.getModules(getContext()).observe(getActivity(), modules -> adapter.swap(modules));
-        adapter.swap(BalanceRepository.getInstance(getContext()).getModules());
+
     }
 }

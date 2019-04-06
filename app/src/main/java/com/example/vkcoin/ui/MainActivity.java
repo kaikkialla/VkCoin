@@ -3,11 +3,11 @@ package com.example.vkcoin.ui;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-
-import com.example.vkcoin.Upgrades;
 import com.example.vkcoin.R;
 import com.example.vkcoin.repository.BalanceRepository;
+import com.example.vkcoin.repository.UpgradeRepository;
 import com.example.vkcoin.ui.fragment.CoinFragment.CoinFragment;
+import com.example.vkcoin.upgrades.CPU;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,13 +39,10 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = firstLogin.edit();
             editor.putBoolean("login", true).apply();
 
-            BalanceRepository.getInstance(getApplicationContext()).increaseBg(0.001f);
-            BalanceRepository.getInstance(getApplicationContext()).increaseClick(0.005f);
 
-            BalanceRepository.getInstance(getApplicationContext()).addmodule(new Upgrades(1, "CPU", 0.1f, 0.003f));
-            BalanceRepository.getInstance(getApplicationContext()).addmodule(new Upgrades(1, "CPU", 0.1f, 0.003f));
-            BalanceRepository.getInstance(getApplicationContext()).addmodule(new Upgrades(2, "Superpc", 1f, 0.03f));
 
+
+            
             BalanceRepository.getInstance(getApplicationContext()).increaseBalance(11.111f);
         }
     }
