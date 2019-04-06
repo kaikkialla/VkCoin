@@ -1,4 +1,4 @@
-package com.example.vkcoin.ui.fragment;
+package com.example.vkcoin.ui.fragment.CoinFragment;
 
 import android.content.Context;
 
@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel;
 import io.reactivex.disposables.Disposable;
 
 public class viewmodel extends ViewModel {
-    private MutableLiveData<Float> balace = new MutableLiveData<>();
+    private MutableLiveData<Float> balance = new MutableLiveData<>();
     private Disposable mDisposable;
     Context context;
 
@@ -18,7 +18,7 @@ public class viewmodel extends ViewModel {
     LiveData<Float> getBalance(Context context) {
         this.context = context;
         subscribeBalance();
-        return balace;
+        return balance;
     }
 
     private void subscribeBalance() {
@@ -27,7 +27,7 @@ public class viewmodel extends ViewModel {
         }
         mDisposable = BalanceRepository.getInstance(context).getBalance()
                 .subscribe(balance -> {
-                    this.balace.setValue(balance);
+                    this.balance.setValue(balance);
                 });
     }
 }

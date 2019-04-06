@@ -15,7 +15,7 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        BalanceRepository.getInstance(getApplicationContext()).start();
         mainComponent = DaggerMainComponent.builder().mainModule(new MainModule()).build();
+        BalanceRepository.getInstance(getApplicationContext()).start();
     }
 }

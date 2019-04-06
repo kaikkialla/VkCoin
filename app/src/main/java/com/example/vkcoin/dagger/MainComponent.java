@@ -1,6 +1,7 @@
 package com.example.vkcoin.dagger;
 
-import com.example.vkcoin.ui.fragment.CoinFragment;
+
+import com.example.vkcoin.ui.fragment.CoinFragment.CoinFragment;
 
 import dagger.Component;
 
