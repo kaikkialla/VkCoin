@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 
+import com.example.vkcoin.Upgrade;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -39,17 +41,11 @@ public class BalanceRepository {
         return balance;
     }
 
-    private float getIncrement() {
-        final float[] increment = {0};
-        UpgradeRepository.getInstance(context).getGain().subscribe(gain -> increment[0] = gain);
-        return increment[0];
-    }
-    //UpgradeRepository.getInstance(context).getGain().subscribe(gain -> gain
 
     public void start() {
         final Handler handler = new Handler();
         final Runnable Update = () -> {
-            float newbalance = balanceSP.getFloat("balance", 0) + getIncrement();
+            float newbalance = balanceSP.getFloat("balance", 0) + 1;
             balanceSP.edit()
                     .putFloat("balance", newbalance)
                     .apply();

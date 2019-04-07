@@ -3,8 +3,12 @@ package com.example.vkcoin.repository;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.vkcoin.upgrades.CPU;
-import com.example.vkcoin.upgrades.Server;
+import com.example.vkcoin.Upgrade;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
@@ -28,29 +32,56 @@ public class UpgradeRepository {
     }
 
 
-    private BehaviorSubject<Float> gain = BehaviorSubject.create();
-    private SharedPreferences gainSp = context.getSharedPreferences("gain", Context.MODE_PRIVATE);
+    private List<Upgrade> upgradeList = new ArrayList<>();
+    private SharedPreferences upgradeSp = context.getSharedPreferences("upgrade", Context.MODE_PRIVATE);
+    private BehaviorSubject<List<Upgrade>> upgrades = BehaviorSubject.create();
 
 
-    public Observable<Float> getGain() {
-        return gain;
+    private BehaviorSubject<Float> increment = BehaviorSubject.create();
+    private SharedPreferences gainSP = context.getSharedPreferences("gain", Context.MODE_PRIVATE);
+
+    public Observable<List<Upgrade>> getUpgrade() {
+        return upgrades;
+    }
+
+    public Observable<Float> getIncrement() {
+        returnIncrement();
+        return increment;
     }
 
 
-    public void addCpu(CPU cpu){
-        cpu.setPrice(cpu.getPrice() * 1.3f);
-        cpu.setQuantity(cpu.getQuantity() + 1);
-        float newgain = gainSp.getFloat("gain", 0) + cpu.getGain();
-        gainSp.edit().putFloat("gain", newgain).apply();
-        gain.onNext(newgain);
+    private void returnIncrement(){
+        float gain = 0;
+        List<Upgrade> a = fromGson();
+        for(Upgrade u : a) {
+            gain = gain + u.getGain();
+        }
+        gainSP.edit().putFloat("gain", gain).apply();
+        increment.onNext(gain);
     }
 
 
-    public void addServer(Server server) {
-        server.setPrice(server.getPrice() * 1.3f);
-        server.setQuantity(server.getQuantity() + 1);
-        float newgain = gainSp.getFloat("gain", 0) + server.getGain();
-        gainSp.edit().putFloat("gain", newgain).apply();
-        gain.onNext(newgain);
+    private void toGson(List<Upgrade> list) {
+        Gson gson = new Gson();
+        List<Upgrade> textList = new ArrayList<>();
+        textList.addAll(list);
+        String jsonText = gson.toJson(textList);
+        upgradeSp.edit().putString("upgrade", jsonText).apply();
     }
+
+    private ArrayList<Upgrade> fromGson() {
+        Gson gson = new Gson();
+        String jsonText1 = upgradeSp.getString("upgrade", null);
+        Upgrade[] text = gson.fromJson(jsonText1, Upgrade[].class);
+        return new ArrayList<>(Arrays.asList(text));
+    }
+
+
+    public void add(Upgrade upgrade) {
+        upgradeList.add(upgrade);
+        toGson(upgradeList);
+        upgrades.onNext(upgradeList);
+    }
+
+
 }

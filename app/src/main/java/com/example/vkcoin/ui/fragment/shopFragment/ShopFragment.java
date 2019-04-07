@@ -4,13 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.vkcoin.R;
-import com.example.vkcoin.repository.BalanceRepository;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
-import org.w3c.dom.Text;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,16 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ShopFragment extends BottomSheetDialogFragment {
 
 
-    TextView cpuname;
-    TextView cpuprice;
-    TextView cpugain;
-    TextView cpuquantity;
-
-    TextView servername;
-    TextView serverprice;
-    TextView servergain;
-    TextView serverquantity;
-
+    private RecyclerView recyclerView;
+    private shopAdapter adapter;
+    viewmodel mViewmodel;
 
     @Nullable
     @Override
@@ -42,21 +31,18 @@ public class ShopFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        cpuname = view.findViewById(R.id.cpuname);
-        cpuprice = view.findViewById(R.id.cpuprice);
-        cpugain = view.findViewById(R.id.cpugain);
-        cpuquantity = view.findViewById(R.id.cpuquantity);
-
-        servername = view.findViewById(R.id.servername);
-        serverprice = view.findViewById(R.id.serverprice);
-        servergain = view.findViewById(R.id.servergain);
-        serverquantity = view.findViewById(R.id.serverquantity);
+        mViewmodel = ViewModelProviders.of(this).get(viewmodel.class);
+        recyclerView = view.findViewById(R.id.recyclerview);
+        adapter = new shopAdapter(getActivity());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        mViewmodel.getUpgrade(getContext()).observe(getActivity(), upgrade -> adapter.swap(upgrade));
 
     }
 }
