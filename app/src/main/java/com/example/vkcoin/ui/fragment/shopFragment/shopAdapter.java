@@ -48,9 +48,8 @@ public class shopAdapter extends RecyclerView.Adapter<shopAdapter.ViewHolder> {
             item = upgradeList.get(position);
         }
         holder.name.setText(item.getName());
-        holder.gain.setText(String.valueOf(item.getGain()));
-        holder.price.setText(String.valueOf(item.getPrice()));
-        Log.e("gkpisgpis", String.valueOf(upgradeList.size()));
+        holder.gain.setText("+" + item.getGain() + "/сек");
+        holder.price.setText("Купить за: " + item.getPrice());
     }
 
 
@@ -58,6 +57,7 @@ public class shopAdapter extends RecyclerView.Adapter<shopAdapter.ViewHolder> {
         this.upgradeList = list;
         notifyDataSetChanged();
     }
+
     @Override
     public int getItemCount() {
         int returnVal = 0;
@@ -68,6 +68,8 @@ public class shopAdapter extends RecyclerView.Adapter<shopAdapter.ViewHolder> {
         }
         return returnVal;
     }
+
+
 
 
     class ViewHolder extends RecyclerView.ViewHolder {

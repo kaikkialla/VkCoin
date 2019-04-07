@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = firstLogin.edit();
             editor.putBoolean("login", true).apply();
 
-            UpgradeRepository.getInstance(getApplicationContext()).add(new Upgrade(CPU, "a", 0.01f,0.001f));
+            UpgradeRepository.getInstance(getApplicationContext()).add(new Upgrade(CPU, "", 0.01f,0.001f));
             UpgradeRepository.getInstance(getApplicationContext()).add(new Upgrade(SERVER, "b", 0.1f,0.01f));
             UpgradeRepository.getInstance(getApplicationContext()).add(new Upgrade(SERVER, "c", 0.1f,0.01f));
 
