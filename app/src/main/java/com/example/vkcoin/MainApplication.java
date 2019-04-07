@@ -5,6 +5,7 @@ import android.app.Application;
 import com.example.vkcoin.dagger.DaggerMainComponent;
 import com.example.vkcoin.dagger.MainComponent;
 import com.example.vkcoin.dagger.MainModule;
+import com.example.vkcoin.database.server.ServerDatabase;
 import com.example.vkcoin.repository.BalanceRepository;
 
 
@@ -17,5 +18,6 @@ public class MainApplication extends Application {
         super.onCreate();
         mainComponent = DaggerMainComponent.builder().mainModule(new MainModule()).build();
         BalanceRepository.getInstance(getApplicationContext()).start();
+        Executor.EXECUTOR.start();
     }
 }

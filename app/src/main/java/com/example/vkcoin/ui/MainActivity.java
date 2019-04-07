@@ -5,16 +5,13 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 
 import com.example.vkcoin.R;
-import com.example.vkcoin.Upgrade;
-import com.example.vkcoin.repository.BalanceRepository;
+import com.example.vkcoin.model.CPUmodel;
+import com.example.vkcoin.model.ServerModel;
 import com.example.vkcoin.repository.UpgradeRepository;
 import com.example.vkcoin.ui.fragment.CoinFragment.CoinFragment;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import static com.example.vkcoin.ui.MainActivity.UpgradeType.CPU;
-import static com.example.vkcoin.ui.MainActivity.UpgradeType.SERVER;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,17 +40,25 @@ public class MainActivity extends AppCompatActivity {
         if(!login) {
             SharedPreferences.Editor editor = firstLogin.edit();
             editor.putBoolean("login", true).apply();
-
-            UpgradeRepository.getInstance(getApplicationContext()).add(new Upgrade(CPU, "", 0.01f,0.001f));
-            UpgradeRepository.getInstance(getApplicationContext()).add(new Upgrade(SERVER, "b", 0.1f,0.01f));
-            UpgradeRepository.getInstance(getApplicationContext()).add(new Upgrade(SERVER, "c", 0.1f,0.01f));
-
-
-            //Upgrade upgrade = new Upgrade();
-            //upgrade.setA(2);
+            CPUmodel cpu = new CPUmodel();
+            ServerModel server = new ServerModel();
+            createCPU(cpu);
+            createServer(server);
         }
     }
 
+
+    private void createCPU(CPUmodel cpu) {
+        cpu.setPrice(0.01f);
+        cpu.setGain(0.001f);
+        UpgradeRepository.getInstance(getApplicationContext()).saveCPU(cpu);
+    }
+
+    private void createServer(ServerModel server) {
+        server.setPrice(0.1f);
+        server.setGain(0.01f);
+        UpgradeRepository.getInstance(getApplicationContext()).saveServer(server);
+    }
 
     public void getScreenSize() {
         DisplayMetrics dm = new DisplayMetrics();

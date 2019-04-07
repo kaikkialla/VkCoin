@@ -42,7 +42,8 @@ public class ShopFragment extends BottomSheetDialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mViewmodel.getUpgrade(getContext()).observe(getActivity(), upgrade -> adapter.swap(upgrade));
+        mViewmodel.getCPU(getContext()).observe(getActivity(), cpu -> adapter.swapCpu(cpu));
+        mViewmodel.getServer(getContext()).observe(getActivity(), server -> adapter.swapServer(server));
 
     }
 }

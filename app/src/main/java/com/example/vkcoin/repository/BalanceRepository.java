@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 
-import com.example.vkcoin.Upgrade;
-
 import java.util.Timer;
 import java.util.TimerTask;
 

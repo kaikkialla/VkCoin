@@ -1,17 +1,22 @@
 package com.example.vkcoin.repository;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.example.vkcoin.Upgrade;
-import com.google.gson.Gson;
+import com.example.vkcoin.Executor;
+import com.example.vkcoin.database.cpu.CpuDao;
+import com.example.vkcoin.database.cpu.CpuDatabase;
+import com.example.vkcoin.database.server.ServerDao;
+import com.example.vkcoin.database.server.ServerDatabase;
+import com.example.vkcoin.model.CPUmodel;
+import com.example.vkcoin.model.ServerModel;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
+
+import androidx.room.Room;
 import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 
 public class UpgradeRepository {
@@ -33,55 +38,53 @@ public class UpgradeRepository {
     }
 
 
-    private SharedPreferences upgradeSp = context.getSharedPreferences("upgrade", Context.MODE_PRIVATE);
-    private BehaviorSubject<List<Upgrade>> upgrades = BehaviorSubject.create();
+    private BehaviorSubject<CPUmodel> cpu= BehaviorSubject.create();
+    private BehaviorSubject<ServerModel> server= BehaviorSubject.create();
 
+    CpuDao cpuDao;
+    ServerDao serverDao;
 
-//    private BehaviorSubject<Float> increment = BehaviorSubject.create();
-//    private SharedPreferences gainSP = context.getSharedPreferences("gain", Context.MODE_PRIVATE);
-
-    public Observable<List<Upgrade>> getUpgrade() {
-        upgrades.onNext(fromGson());
-        return upgrades;
+    public void initialize(Context context) {
+        cpuDao = Room.databaseBuilder(context.getApplicationContext(), CpuDatabase.class, "cpudb").build().getCpuDao();
+        serverDao = Room.databaseBuilder(context.getApplicationContext(), ServerDatabase.class, "serverdb").build().getServerDao();
+        loadCPU();
+        loadServer();
     }
 
-//    public Observable<Float> getIncrement() {
-//        returnIncrement();
-//        return increment;
-//    }
-
-
-//    private void returnIncrement(){
-//        float gain = 0;
-//        List<Upgrade> a = fromGson();
-//        for(Upgrade u : a) {
-//            gain = gain + u.getGain();
-//        }
-//        gainSP.edit().putFloat("gain", gain).apply();
-//        increment.onNext(gain);
-//    }
-
-
-    private void toGson(List<Upgrade> list) {
-        Gson gson = new Gson();
-        List<Upgrade> textList = new ArrayList<>();
-        textList.addAll(list);
-        String jsonText = gson.toJson(textList);
-        upgradeSp.edit().putString("upgrade", jsonText).apply();
+    public Observable<CPUmodel> getCpu() {
+        loadCPU();
+        return cpu;
     }
 
-    private ArrayList<Upgrade> fromGson() {
-        Gson gson = new Gson();
-        String jsonText1 = upgradeSp.getString("upgrade", null);
-        Upgrade[] text = gson.fromJson(jsonText1, Upgrade[].class);
-        return new ArrayList<>(Arrays.asList(text));
+    public Observable<ServerModel> getServer() {
+        loadServer();
+        return server;
     }
 
 
-    public void add(Upgrade upgrade) {
-        List<Upgrade> list = new ArrayList<>();
-        list.add(upgrade);
-        toGson(list);
-        upgrades.onNext(fromGson());
+    public void loadCPU() {
+        Executor.EXECUTOR.execute(() -> cpu.onNext(cpuDao.getAll()));
     }
+
+    public void loadServer() {
+        Executor.EXECUTOR.execute(() -> server.onNext(serverDao.getAll()));
+    }
+
+    public void saveCPU(CPUmodel cpumodel) {
+        Single.fromCallable(() -> {
+            cpuDao.deleteAll();
+            cpuDao.insert(cpumodel);
+            return true;
+        }).subscribeOn(Schedulers.io()).subscribe(ignore -> {}, e -> Log.e("TEST", "", e));
+    }
+
+    public void saveServer(ServerModel serverModel) {
+        Single.fromCallable(() -> {
+            serverDao.deleteAll();
+            serverDao.insert(serverModel);
+            return true;
+        }).subscribeOn(Schedulers.io()).subscribe(ignore -> {}, e -> Log.e("TEST", "", e));
+    }
+
+
 }
