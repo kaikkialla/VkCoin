@@ -2,6 +2,7 @@ package com.example.vkcoin.repository;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.example.vkcoin.Upgrade;
 import com.google.gson.Gson;
@@ -32,33 +33,33 @@ public class UpgradeRepository {
     }
 
 
-    private List<Upgrade> upgradeList = new ArrayList<>();
     private SharedPreferences upgradeSp = context.getSharedPreferences("upgrade", Context.MODE_PRIVATE);
     private BehaviorSubject<List<Upgrade>> upgrades = BehaviorSubject.create();
 
 
-    private BehaviorSubject<Float> increment = BehaviorSubject.create();
-    private SharedPreferences gainSP = context.getSharedPreferences("gain", Context.MODE_PRIVATE);
+//    private BehaviorSubject<Float> increment = BehaviorSubject.create();
+//    private SharedPreferences gainSP = context.getSharedPreferences("gain", Context.MODE_PRIVATE);
 
     public Observable<List<Upgrade>> getUpgrade() {
+        upgrades.onNext(fromGson());
         return upgrades;
     }
 
-    public Observable<Float> getIncrement() {
-        returnIncrement();
-        return increment;
-    }
+//    public Observable<Float> getIncrement() {
+//        returnIncrement();
+//        return increment;
+//    }
 
 
-    private void returnIncrement(){
-        float gain = 0;
-        List<Upgrade> a = fromGson();
-        for(Upgrade u : a) {
-            gain = gain + u.getGain();
-        }
-        gainSP.edit().putFloat("gain", gain).apply();
-        increment.onNext(gain);
-    }
+//    private void returnIncrement(){
+//        float gain = 0;
+//        List<Upgrade> a = fromGson();
+//        for(Upgrade u : a) {
+//            gain = gain + u.getGain();
+//        }
+//        gainSP.edit().putFloat("gain", gain).apply();
+//        increment.onNext(gain);
+//    }
 
 
     private void toGson(List<Upgrade> list) {
@@ -78,10 +79,9 @@ public class UpgradeRepository {
 
 
     public void add(Upgrade upgrade) {
-        upgradeList.add(upgrade);
-        toGson(upgradeList);
-        upgrades.onNext(upgradeList);
+        List<Upgrade> list = new ArrayList<>();
+        list.add(upgrade);
+        toGson(list);
+        upgrades.onNext(fromGson());
     }
-
-
 }
