@@ -7,6 +7,7 @@ import com.example.vkcoin.dagger.MainComponent;
 import com.example.vkcoin.dagger.MainModule;
 import com.example.vkcoin.database.server.ServerDatabase;
 import com.example.vkcoin.repository.BalanceRepository;
+import com.example.vkcoin.repository.UpgradeRepository;
 
 
 public class MainApplication extends Application {
@@ -19,5 +20,6 @@ public class MainApplication extends Application {
         mainComponent = DaggerMainComponent.builder().mainModule(new MainModule()).build();
         BalanceRepository.getInstance(getApplicationContext()).start();
         Executor.EXECUTOR.start();
+        UpgradeRepository.getInstance(getApplicationContext()).initialize();
     }
 }

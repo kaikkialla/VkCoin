@@ -9,6 +9,7 @@ import com.example.vkcoin.repository.UpgradeRepository;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 public class viewmodel extends ViewModel {
@@ -38,7 +39,10 @@ public class viewmodel extends ViewModel {
             mCPUDisposable.dispose();
         }
         mCPUDisposable = UpgradeRepository.getInstance(context).getCpu()
-                .subscribe(u-> this.cpu.setValue(u));
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(u-> {
+                    this.cpu.setValue(u);
+                });
     }
 
 
@@ -47,6 +51,9 @@ public class viewmodel extends ViewModel {
             mServerDisposable.dispose();
         }
         mServerDisposable = UpgradeRepository.getInstance(context).getServer()
-                .subscribe(u-> this.server.setValue(u));
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(u-> {
+                    this.server.setValue(u);
+                });
     }
 }

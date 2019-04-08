@@ -8,18 +8,29 @@ import androidx.room.PrimaryKey;
 public class ServerModel {
 
     @PrimaryKey @NonNull
-    private String id;
+    private int id;
 
     private String name;
     private float price;
     private float gain;
     private long quantity;
 
-    public String getId() {
+    @Override
+    public String toString() {
+        return "ServerModel{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", gain=" + gain +
+                ", quantity=" + quantity +
+                '}';
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

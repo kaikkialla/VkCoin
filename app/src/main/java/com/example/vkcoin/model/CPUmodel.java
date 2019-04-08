@@ -8,19 +8,29 @@ import androidx.room.PrimaryKey;
 public class CPUmodel {
 
     @PrimaryKey @NonNull
-    private String id;
+    private int id;
 
     private String name;
     private float price;
     private float gain;
     private long quantity;
 
+    @Override
+    public String toString() {
+        return "CPUmodel{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", gain=" + gain +
+                ", quantity=" + quantity +
+                '}';
+    }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

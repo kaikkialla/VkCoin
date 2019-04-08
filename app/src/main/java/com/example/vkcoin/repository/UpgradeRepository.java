@@ -44,7 +44,7 @@ public class UpgradeRepository {
     CpuDao cpuDao;
     ServerDao serverDao;
 
-    public void initialize(Context context) {
+    public void initialize() {
         cpuDao = Room.databaseBuilder(context.getApplicationContext(), CpuDatabase.class, "cpudb").build().getCpuDao();
         serverDao = Room.databaseBuilder(context.getApplicationContext(), ServerDatabase.class, "serverdb").build().getServerDao();
         loadCPU();
@@ -63,11 +63,21 @@ public class UpgradeRepository {
 
 
     public void loadCPU() {
-        Executor.EXECUTOR.execute(() -> cpu.onNext(cpuDao.getAll()));
+        Executor.EXECUTOR.execute(() -> {
+            final CPUmodel cpumodel = cpuDao.getAll();
+            if(cpumodel != null) {
+                cpu.onNext(cpumodel);
+            }
+        });
     }
 
     public void loadServer() {
-        Executor.EXECUTOR.execute(() -> server.onNext(serverDao.getAll()));
+        Executor.EXECUTOR.execute(() -> {
+            final ServerModel servermodel = serverDao.getAll();
+            if (servermodel != null) {
+                server.onNext(servermodel);
+            }
+        });
     }
 
     public void saveCPU(CPUmodel cpumodel) {

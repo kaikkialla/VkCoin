@@ -35,7 +35,7 @@ public class CoinFragment extends Fragment {
 
     private viewmodel mViewmodel;
     //@Inject BalanceRepository repository;
-
+    private float balance1;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -82,7 +82,10 @@ public class CoinFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mViewmodel.getBalance(getContext()).observe(getActivity(), balance -> mBalance.setText(String.format("%.3f", balance)));
+        mViewmodel.getBalance(getContext()).observe(getActivity(), balance -> {
+            balance1 = balance;
+            mBalance.setText(String.format("%.3f", balance1));
+        });
     }
 
     private void setSizes() {
@@ -93,4 +96,10 @@ public class CoinFragment extends Fragment {
         mLeaderboard.setLayoutParams(layoutParams);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        BalanceRepository.getInstance(getContext()).saveBalance(balance1);
+
+    }
 }

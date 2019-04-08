@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.vkcoin.R;
+import com.example.vkcoin.repository.BalanceRepository;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import androidx.annotation.NonNull;
@@ -43,7 +44,8 @@ public class ShopFragment extends BottomSheetDialogFragment {
     public void onResume() {
         super.onResume();
         mViewmodel.getCPU(getContext()).observe(getActivity(), cpu -> adapter.swapCpu(cpu));
-        mViewmodel.getServer(getContext()).observe(getActivity(), server -> adapter.swapServer(server));
-
+        mViewmodel.getServer(getContext()).observe(getActivity(), server -> {
+            adapter.swapServer(server);
+        });
     }
 }

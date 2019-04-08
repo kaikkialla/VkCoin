@@ -32,7 +32,6 @@ public class BalanceRepository {
 
     private SharedPreferences balanceSP = context.getSharedPreferences("balance", Context.MODE_PRIVATE);
 
-
     private BehaviorSubject<Float> balance = BehaviorSubject.create();
 
     public Observable<Float> getBalance() {
@@ -41,13 +40,11 @@ public class BalanceRepository {
 
 
     public void start() {
+        final float[] b = {balanceSP.getFloat("balance", 0)};
         final Handler handler = new Handler();
         final Runnable Update = () -> {
-            float newbalance = balanceSP.getFloat("balance", 0) + 1;
-            balanceSP.edit()
-                    .putFloat("balance", newbalance)
-                    .apply();
-            balance.onNext(balanceSP.getFloat("balance", 0f));
+            b[0] = b[0] + 1;
+            balance.onNext(b[0]);
         };
         Timer swipeTimer = new Timer();
         swipeTimer.schedule(new TimerTask() {
@@ -72,4 +69,15 @@ public class BalanceRepository {
     public void increaseBalance(float addition) {
         balanceSP.edit().putFloat("balance", balanceSP.getFloat("balance", 0) + addition).apply();
     }
+
+    public void saveBalance(float balance) {
+        balanceSP.edit().putFloat("balance", this.balance.getValue()).apply();
+    }
+
+    public void loadBalance() {}
 }
+
+/**
+    Переделать сохранение баланса
+    Чтобы сохранялся при закрытии приложения, а не при изменении
+ */
