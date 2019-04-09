@@ -38,12 +38,13 @@ public class BalanceRepository {
         return balance;
     }
 
+    private float[] b;
 
     public void start() {
-        final float[] b = {balanceSP.getFloat("balance", 0)};
+        b = new float[]{balanceSP.getFloat("balance", 0)};
         final Handler handler = new Handler();
         final Runnable Update = () -> {
-            b[0] = b[0] + 1;
+            b[0] = b[0] + 0.001f;
             balance.onNext(b[0]);
         };
         Timer swipeTimer = new Timer();
@@ -57,12 +58,8 @@ public class BalanceRepository {
 
 
     public void click() {
-        float newbalance = balanceSP.getFloat("balance", 0) +0.001f;
-
-        balanceSP.edit()
-                .putFloat("balance", newbalance)
-                .apply();
-        balance.onNext(balanceSP.getFloat("balance", 0f));
+        b[0] = b[0] + 1;
+        balance.onNext(b[0]);
     }
 
 
