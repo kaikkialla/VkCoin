@@ -3,10 +3,12 @@ package com.example.vkcoin.ui;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
-import com.example.vkcoin.Upgrades;
 import com.example.vkcoin.R;
-import com.example.vkcoin.repository.BalanceRepository;
+import com.example.vkcoin.model.CPUmodel;
+import com.example.vkcoin.model.ServerModel;
+import com.example.vkcoin.repository.UpgradeRepository;
 import com.example.vkcoin.ui.fragment.CoinFragment.CoinFragment;
 
 import androidx.annotation.Nullable;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         getScreenSize();
         checkLogin();
 
+
         if(savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new CoinFragment()).commit();
         }
@@ -39,17 +42,33 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = firstLogin.edit();
             editor.putBoolean("login", true).apply();
 
-            BalanceRepository.getInstance(getApplicationContext()).increaseBg(0.001f);
-            BalanceRepository.getInstance(getApplicationContext()).increaseClick(0.005f);
-
-            BalanceRepository.getInstance(getApplicationContext()).addmodule(new Upgrades(1, "CPU", 0.1f, 0.003f));
-            BalanceRepository.getInstance(getApplicationContext()).addmodule(new Upgrades(1, "CPU", 0.1f, 0.003f));
-            BalanceRepository.getInstance(getApplicationContext()).addmodule(new Upgrades(2, "Superpc", 1f, 0.03f));
-
-            BalanceRepository.getInstance(getApplicationContext()).increaseBalance(11.111f);
+            CPUmodel cpu = new CPUmodel();
+            ServerModel server = new ServerModel();
+            createCPU(cpu);
+            createServer(server);
         }
     }
 
+
+    private void createCPU(CPUmodel cpu) {
+        cpu.setId(0);
+        cpu.setPrice(0.01f);
+        cpu.setGain(0.001f);
+        cpu.setName("name1");
+        cpu.setQuantity(1);
+        //Log.e("TEST", String.valueOf(cpu));
+        UpgradeRepository.getInstance(getApplicationContext()).saveCPU(cpu);
+    }
+
+    private void createServer(ServerModel server) {
+        server.setId(0);
+        server.setPrice(0.1f);
+        server.setGain(0.01f);
+        server.setName("name2");
+        server.setQuantity(2);
+        //Log.e("TEST", String.valueOf(server));
+        UpgradeRepository.getInstance(getApplicationContext()).saveServer(server);
+    }
 
     public void getScreenSize() {
         DisplayMetrics dm = new DisplayMetrics();
@@ -57,5 +76,9 @@ public class MainActivity extends AppCompatActivity {
         density = getResources().getDisplayMetrics().density;
         SCREEN_WIDTH = dm.widthPixels;
         SCREEN_HEIGHT = dm.heightPixels;
+    }
+
+    public static enum UpgradeType{
+        CPU, SERVER
     }
 }

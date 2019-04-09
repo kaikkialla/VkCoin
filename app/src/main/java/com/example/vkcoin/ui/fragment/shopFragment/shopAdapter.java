@@ -6,53 +6,60 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.vkcoin.R;
-import com.example.vkcoin.Upgrades;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.example.vkcoin.model.CPUmodel;
+import com.example.vkcoin.model.ServerModel;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class shopAdapter extends RecyclerView.Adapter<shopAdapter.ViewHolder> {
-    private List<Upgrades> bonuses = new ArrayList<>();
-    FragmentActivity activity;
 
+public class shopAdapter extends RecyclerView.Adapter<shopAdapter.ViewHolder> {
+    FragmentActivity activity;
+    CPUmodel cpu;
+    ServerModel server;
     public shopAdapter(FragmentActivity activity) {
         this.activity = activity;
     }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(activity);
         View v = inflater.inflate(R.layout.shoprow   , parent, false );
         ViewHolder vh = new ViewHolder(v);
-
         return vh;
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.name.setText(bonuses.get(position).getName());
-
-        List<Integer> ids = new ArrayList<>();
-        for(Upgrades bonus : bonuses) {
-            ids.add(bonus.getid());
+        if(position == 0 && cpu != null) {
+            holder.name.setText(cpu.getName());
+            holder.gain.setText("+" + cpu.getGain() + "/сек");
+            holder.price.setText("Купить за: " + cpu.getPrice());
+        } else if(position == 1 && server != null) {
+            holder.name.setText(server.getName());
+            holder.gain.setText("+" + server.getGain() + "/сек");
+            holder.price.setText("Купить за: " + server.getPrice());
         }
-        holder.gain.setText(String.valueOf(Collections.frequency(ids, bonuses.get(position).getid())));
-
     }
+
+    public void swapCpu(CPUmodel cpumodel){
+        this.cpu = cpumodel;
+        notifyDataSetChanged();
+    }
+
+    public void swapServer(ServerModel servermodel){
+        this.server = servermodel;
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public int getItemCount() {
-        return bonuses.size();
+        return 2;
     }
 
 
-    public void swap(List<Upgrades> list) {
-        this.bonuses = list;
-        notifyDataSetChanged();
-    }
 
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -68,12 +75,6 @@ public class shopAdapter extends RecyclerView.Adapter<shopAdapter.ViewHolder> {
             this.name = itemView.findViewById(R.id.name);
             this.price = itemView.findViewById(R.id.price);
             this.gain = itemView.findViewById(R.id.gain);
-
         }
     }
 }
-
-
-
-
-

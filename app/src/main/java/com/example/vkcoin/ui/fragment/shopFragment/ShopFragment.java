@@ -17,9 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ShopFragment extends BottomSheetDialogFragment {
 
+
     private RecyclerView recyclerView;
+    private shopAdapter adapter;
     viewmodel mViewmodel;
-    shopAdapter adapter;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -30,20 +32,20 @@ public class ShopFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        adapter = new shopAdapter(getActivity());
         mViewmodel = ViewModelProviders.of(this).get(viewmodel.class);
-
         recyclerView = view.findViewById(R.id.recyclerview);
+        adapter = new shopAdapter(getActivity());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //mViewmodel.getModules(getContext()).observe(getActivity(), modules -> adapter.swap(modules));
-        adapter.swap(BalanceRepository.getInstance(getContext()).getModules());
+        mViewmodel.getCPU(getContext()).observe(getActivity(), cpu -> adapter.swapCpu(cpu));
+        mViewmodel.getServer(getContext()).observe(getActivity(), server -> {
+            adapter.swapServer(server);
+        });
     }
 }

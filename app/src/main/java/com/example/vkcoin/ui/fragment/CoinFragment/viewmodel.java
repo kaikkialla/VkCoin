@@ -1,12 +1,14 @@
 package com.example.vkcoin.ui.fragment.CoinFragment;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.vkcoin.repository.BalanceRepository;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 public class viewmodel extends ViewModel {
@@ -26,8 +28,9 @@ public class viewmodel extends ViewModel {
             mDisposable.dispose();
         }
         mDisposable = BalanceRepository.getInstance(context).getBalance()
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(balance -> {
                     this.balance.setValue(balance);
-                });
+                }, e -> Log.v("TEST", "subscribeBalance", e));
     }
 }

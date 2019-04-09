@@ -1,25 +1,59 @@
 package com.example.vkcoin.ui.fragment.shopFragment;
 
+import android.content.Context;
 
+import com.example.vkcoin.model.CPUmodel;
+import com.example.vkcoin.model.ServerModel;
+import com.example.vkcoin.repository.UpgradeRepository;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 
 public class viewmodel extends ViewModel {
-//    private MutableLiveData<List<Bonus>> modules = new MutableLiveData<>();
-//    private Disposable mDisposable;
-//    Context context;
-//
-//
-//    LiveData<List<Bonus>> getModules(Context context) {
-//        this.context = context;
-//        subscribeModules();
-//        return modules;
-//    }
-//
-//    private void subscribeModules() {
-//        if (mDisposable != null) {
-//            mDisposable.dispose();
-//        }
-//        mDisposable = BalanceRepository.getInstance(context).getModules()
-//                .subscribe(modules -> this.modules.setValue(modules));
-//    }
+    private MutableLiveData<CPUmodel> cpu= new MutableLiveData<>();
+    private MutableLiveData<ServerModel> server = new MutableLiveData<>();
+    private Disposable mCPUDisposable;
+    private Disposable mServerDisposable;
+    Context context;
+
+
+
+    LiveData<CPUmodel> getCPU(Context context) {
+        this.context = context;
+        subscribeCPU();
+        return cpu;
+    }
+
+    LiveData<ServerModel> getServer(Context context) {
+        this.context = context;
+        subscribeServer();
+        return server;
+    }
+
+
+    private void subscribeCPU() {
+        if (mCPUDisposable != null) {
+            mCPUDisposable.dispose();
+        }
+        mCPUDisposable = UpgradeRepository.getInstance(context).getCpu()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(u-> {
+                    this.cpu.setValue(u);
+                });
+    }
+
+
+    private void subscribeServer() {
+        if (mServerDisposable != null) {
+            mServerDisposable.dispose();
+        }
+        mServerDisposable = UpgradeRepository.getInstance(context).getServer()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(u-> {
+                    this.server.setValue(u);
+                });
+    }
 }
