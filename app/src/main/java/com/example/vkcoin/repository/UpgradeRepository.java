@@ -38,6 +38,14 @@ public class UpgradeRepository {
     }
 
 
+    private BehaviorSubject<Long> increment = BehaviorSubject.create();
+
+    public Observable<Long> getIncrement() {
+        return increment;
+    }
+
+
+
     private BehaviorSubject<CPUmodel> cpu= BehaviorSubject.create();
     private BehaviorSubject<ServerModel> server= BehaviorSubject.create();
 
@@ -47,9 +55,10 @@ public class UpgradeRepository {
     public void initialize() {
         cpuDao = Room.databaseBuilder(context.getApplicationContext(), CpuDatabase.class, "cpudb").build().getCpuDao();
         serverDao = Room.databaseBuilder(context.getApplicationContext(), ServerDatabase.class, "serverdb").build().getServerDao();
-        loadCPU();
-        loadServer();
+//        loadCPU();
+//        loadServer();
     }
+
 
     public Observable<CPUmodel> getCpu() {
         loadCPU();
@@ -81,20 +90,38 @@ public class UpgradeRepository {
     }
 
     public void saveCPU(CPUmodel cpumodel) {
-        Single.fromCallable(() -> {
-            cpuDao.deleteAll();
-            cpuDao.insert(cpumodel);
-            return true;
-        }).subscribeOn(Schedulers.io()).subscribe(ignore -> {}, e -> Log.e("TEST", "", e));
+        Executor.EXECUTOR.execute(() -> {
+            Single.fromCallable(() -> {
+                cpuDao.deleteAll();
+                cpuDao.insert(cpumodel);
+                return true;
+            }).subscribeOn(Schedulers.io()).subscribe(ignore -> {}, e -> Log.e("TEST", "", e));
+        });
     }
 
     public void saveServer(ServerModel serverModel) {
-        Single.fromCallable(() -> {
-            serverDao.deleteAll();
-            serverDao.insert(serverModel);
-            return true;
-        }).subscribeOn(Schedulers.io()).subscribe(ignore -> {}, e -> Log.e("TEST", "", e));
+        Executor.EXECUTOR.execute(() -> {
+            Single.fromCallable(() -> {
+                serverDao.deleteAll();
+                serverDao.insert(serverModel);
+                return true;
+            }).subscribeOn(Schedulers.io()).subscribe(ignore -> {}, e -> Log.e("TEST", "", e));
+        });
     }
 
+    public void buyCPU(CPUmodel cpUmodel) {
+        cpUmodel.setQuantity(cpUmodel.getQuantity() + 1);
+        cpUmodel.setPrice(cpUmodel.getPrice() + 10);
+        cpUmodel.setGain(cpUmodel.getGain() + 5);
+        saveCPU(cpUmodel);
+        loadCPU();
+    }
 
+    public void buyServer(ServerModel serverModel) {
+        serverModel.setQuantity((long) (serverModel.getQuantity() + 1));
+        serverModel.setPrice(serverModel.getPrice() + 15);
+        serverModel.setGain(serverModel.getGain() + 1);
+        saveServer(serverModel);
+        loadServer();
+    }
 }

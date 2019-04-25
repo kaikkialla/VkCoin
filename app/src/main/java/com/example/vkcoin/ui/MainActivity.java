@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         cpu.setPrice(0.01f);
         cpu.setGain(0.001f);
         cpu.setName("name1");
-        cpu.setQuantity(1);
+        cpu.setQuantity(0);
         //Log.e("TEST", String.valueOf(cpu));
         UpgradeRepository.getInstance(getApplicationContext()).saveCPU(cpu);
     }
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         server.setPrice(0.1f);
         server.setGain(0.01f);
         server.setName("name2");
-        server.setQuantity(2);
+        server.setQuantity(0);
         //Log.e("TEST", String.valueOf(server));
         UpgradeRepository.getInstance(getApplicationContext()).saveServer(server);
     }

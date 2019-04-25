@@ -4,19 +4,27 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 
+import com.example.vkcoin.model.CPUmodel;
+import com.example.vkcoin.model.ServerModel;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.subjects.BehaviorSubject;
 
 
 public class BalanceRepository {
     private static Context context;
     private static volatile BalanceRepository instance;
+    static CPUmodel cpu;
+    static ServerModel server;
 
     public static BalanceRepository getInstance(Context c) {
         context = c;
+//        cpu = cpUmodel;
+//        server = serverModel;
         BalanceRepository localInstance = instance;
         if (localInstance == null) {
             synchronized (BalanceRepository.class) {
@@ -41,10 +49,23 @@ public class BalanceRepository {
     private float[] b;
 
     public void start() {
+        UpgradeRepository.getInstance(context).getCpu()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(u-> {
+                    cpu = u;
+                });
+
+        UpgradeRepository.getInstance(context).getServer()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(u-> {
+                    server = u;
+                });
+
         b = new float[]{balanceSP.getFloat("balance", 0)};
         final Handler handler = new Handler();
         final Runnable Update = () -> {
-            b[0] = b[0] + 0.001f;
+            b[0] = b[0] + server.getGain() + cpu.getGain();
+
             balance.onNext(b[0]);
         };
         Timer swipeTimer = new Timer();
@@ -71,7 +92,6 @@ public class BalanceRepository {
         balanceSP.edit().putFloat("balance", this.balance.getValue()).apply();
     }
 
-    public void loadBalance() {}
 }
 
 /**
