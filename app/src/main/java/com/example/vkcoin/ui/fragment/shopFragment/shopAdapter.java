@@ -38,7 +38,10 @@ public class shopAdapter extends RecyclerView.Adapter<shopAdapter.ViewHolder> {
             holder.name.setText(cpu.getName());
             holder.gain.setText("+" + cpu.getGain() + "/сек");
             holder.price.setText("Купить за: " + cpu.getPrice());
-            holder.itemView.setOnClickListener(v -> UpgradeRepository.getInstance(activity).buyCPU(cpu));
+            holder.itemView.setOnClickListener(v -> {
+                Log.e("TEST0", "Click " + cpu);
+                UpgradeRepository.getInstance(activity).buyCPU(cpu);
+            });
         } else if(position == 1 && server != null) {
             holder.name.setText(server.getName());
             holder.gain.setText("+" + server.getGain() + "/сек");
@@ -48,6 +51,7 @@ public class shopAdapter extends RecyclerView.Adapter<shopAdapter.ViewHolder> {
     }
 
     public void swapCpu(CPUmodel cpumodel){
+        Log.v("TEST2", cpumodel.toString());
         this.cpu = cpumodel;
         notifyDataSetChanged();
     }

@@ -1,8 +1,10 @@
 package com.example.vkcoin.ui.fragment.CoinFragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,8 @@ import com.example.vkcoin.MainApplication;
 import com.example.vkcoin.R;
 import com.example.vkcoin.repository.BalanceRepository;
 import com.example.vkcoin.ui.fragment.shopFragment.ShopFragment;
+
+import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -99,7 +103,7 @@ public class CoinFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        Log.e("fkpafapfa", String.valueOf(balance1));
         BalanceRepository.getInstance(getContext()).saveBalance(balance1);
-
     }
 }

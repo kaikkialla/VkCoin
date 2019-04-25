@@ -46,8 +46,8 @@ public class BalanceRepository {
         return balance;
     }
 
-    private float[] b;
 
+    private float[] b;
     public void start() {
         UpgradeRepository.getInstance(context).getCpu()
                 .observeOn(AndroidSchedulers.mainThread())

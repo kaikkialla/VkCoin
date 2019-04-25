@@ -38,11 +38,6 @@ public class UpgradeRepository {
     }
 
 
-    private BehaviorSubject<Long> increment = BehaviorSubject.create();
-
-    public Observable<Long> getIncrement() {
-        return increment;
-    }
 
 
 
@@ -112,16 +107,16 @@ public class UpgradeRepository {
     public void buyCPU(CPUmodel cpUmodel) {
         cpUmodel.setQuantity(cpUmodel.getQuantity() + 1);
         cpUmodel.setPrice(cpUmodel.getPrice() + 10);
+        Log.v("TEST1", String.valueOf(cpUmodel));
         cpUmodel.setGain(cpUmodel.getGain() + 5);
-        saveCPU(cpUmodel);
-        loadCPU();
+        cpu.onNext(cpUmodel);
     }
 
     public void buyServer(ServerModel serverModel) {
         serverModel.setQuantity((long) (serverModel.getQuantity() + 1));
         serverModel.setPrice(serverModel.getPrice() + 15);
         serverModel.setGain(serverModel.getGain() + 1);
-        saveServer(serverModel);
-        loadServer();
+        serverModel.setGain(serverModel.getGain() + 5);
+        server.onNext(serverModel);
     }
 }

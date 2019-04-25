@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "314958506501",
+    "firebase_url": "https://vkcoin-2bca7.firebaseio.com",
+    "project_id": "vkcoin-2bca7",
+    "storage_bucket": "vkcoin-2bca7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:314958506501:android:5bb48fcc6a7bf07b",
+        "android_client_info": {
+          "package_name": "com.example.vkcoin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "314958506501-j6ac7httd4ho9jlt8g3eo9lmkh52lv3q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqjSjBZXIBRjjL0yskWYnzu-jLmIbGPGI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "314958506501-j6ac7httd4ho9jlt8g3eo9lmkh52lv3q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
