@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.example.vkcoin.R;
 import com.example.vkcoin.model.CPUmodel;
+import com.example.vkcoin.model.ServerModel;
 import com.example.vkcoin.repository.BalanceRepository;
 import com.example.vkcoin.repository.UpgradeRepository;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -24,6 +25,7 @@ public class ShopFragment extends BottomSheetDialogFragment {
     private shopAdapter adapter;
     viewmodel mViewmodel;
     CPUmodel cpUmodel;
+    ServerModel serverModel;
 
     @Nullable
     @Override
@@ -52,6 +54,7 @@ public class ShopFragment extends BottomSheetDialogFragment {
         });
         mViewmodel.getServer(getContext()).observe(getActivity(), server -> {
             adapter.swapServer(server);
+            serverModel = server;
         });
     }
 
@@ -59,5 +62,6 @@ public class ShopFragment extends BottomSheetDialogFragment {
     public void onPause() {
         super.onPause();
         UpgradeRepository.getInstance(getActivity()).saveCPU(cpUmodel);
+        UpgradeRepository.getInstance(getActivity()).saveServer(serverModel);
     }
 }

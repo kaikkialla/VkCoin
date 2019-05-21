@@ -14,7 +14,10 @@ import android.widget.TextView;
 
 import com.example.vkcoin.MainApplication;
 import com.example.vkcoin.R;
+import com.example.vkcoin.model.CPUmodel;
+import com.example.vkcoin.model.ServerModel;
 import com.example.vkcoin.repository.BalanceRepository;
+import com.example.vkcoin.repository.UpgradeRepository;
 import com.example.vkcoin.ui.fragment.shopFragment.ShopFragment;
 
 import javax.inject.Inject;
@@ -24,6 +27,8 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import static com.example.vkcoin.ui.MainActivity.SCREEN_WIDTH;
 import static com.example.vkcoin.ui.MainActivity.density;
@@ -40,6 +45,11 @@ public class CoinFragment extends Fragment {
     private viewmodel mViewmodel;
     //@Inject BalanceRepository repository;
     private float balance1;
+    private RecyclerView recyclerView;
+    modulesadapter adapter;
+    CPUmodel cpUmodel;
+    ServerModel serverModel;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -67,6 +77,11 @@ public class CoinFragment extends Fragment {
 
         mViewmodel = ViewModelProviders.of(this).get(viewmodel.class);
 
+        recyclerView = view.findViewById(R.id.recyclerview);
+
+        adapter = new modulesadapter(getActivity());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         setSizes();
 
 
@@ -90,10 +105,18 @@ public class CoinFragment extends Fragment {
             balance1 = balance;
             mBalance.setText(String.format("%.3f", balance1));
         });
+        mViewmodel.getCPU(getContext()).observe(getActivity(), cpu -> {
+            adapter.swapCpu(cpu);
+            cpUmodel = cpu;
+        });
+        mViewmodel.getServer(getContext()).observe(getActivity(), server -> {
+            adapter.swapServer(server);
+            serverModel = server;
+        });
     }
 
     private void setSizes() {
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(SCREEN_WIDTH / 3 - 8 * 5, (int) ((SCREEN_WIDTH / 3 - 8 * 2) / 1.6), ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(SCREEN_WIDTH / 3 - (8 * 4), (int) ((SCREEN_WIDTH / 3 - (8 * 4)) / 1.6), ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins((int) (4*density), 0, (int) (4 * density), 0);
         mShop.setLayoutParams(layoutParams);
         mTransaction.setLayoutParams(layoutParams);
@@ -105,5 +128,7 @@ public class CoinFragment extends Fragment {
         super.onPause();
         Log.e("fkpafapfa", String.valueOf(balance1));
         BalanceRepository.getInstance(getContext()).saveBalance(balance1);
+        UpgradeRepository.getInstance(getActivity()).saveCPU(cpUmodel);
+        UpgradeRepository.getInstance(getActivity()).saveServer(serverModel);
     }
 }

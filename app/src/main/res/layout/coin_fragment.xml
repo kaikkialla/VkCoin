@@ -31,13 +31,14 @@
     </LinearLayout>
 
 
-
     <LinearLayout
+        android:id="@+id/buttons_feed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_below="@id/balancelayout"
         android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
         android:layout_centerHorizontal="true">
 
 
@@ -132,6 +133,14 @@
                 android:textColor="@color/text_light"/>
         </LinearLayout>
     </LinearLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttons_feed"/>
+
 
 
     <ImageView
