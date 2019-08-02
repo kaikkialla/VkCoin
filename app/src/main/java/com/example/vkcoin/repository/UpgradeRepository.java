@@ -107,7 +107,7 @@ public class UpgradeRepository {
     public void buyCPU(CPUmodel cpUmodel) {
         cpUmodel.setQuantity(cpUmodel.getQuantity() + 1);
         cpUmodel.setPrice(cpUmodel.getPrice() + 10);
-        Log.v("TEST1", String.valueOf(cpUmodel));
+        Log.v("TEST1","cpu" + cpUmodel.getGain());
         cpUmodel.setGain(cpUmodel.getGain() + 5);
         cpu.onNext(cpUmodel);
     }
@@ -117,6 +117,7 @@ public class UpgradeRepository {
         serverModel.setPrice(serverModel.getPrice() + 15);
         serverModel.setGain(serverModel.getGain() + 1);
         serverModel.setGain(serverModel.getGain() + 5);
+        Log.v("TEST1", "Server" + serverModel.getGain());
         server.onNext(serverModel);
     }
 }

@@ -34,7 +34,7 @@ public class shopAdapter extends RecyclerView.Adapter<shopAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        if(position == 0 && cpu != null) {
+        if (position == 0 && cpu != null) {
             holder.name.setText(cpu.getName());
             holder.gain.setText("+" + cpu.getGain() + "/сек");
             holder.price.setText("Купить за: " + cpu.getPrice());
@@ -42,7 +42,7 @@ public class shopAdapter extends RecyclerView.Adapter<shopAdapter.ViewHolder> {
                 Log.e("TEST0", "Click " + cpu);
                 UpgradeRepository.getInstance(activity).buyCPU(cpu);
             });
-        } else if(position == 1 && server != null) {
+        } else if (position == 1 && server != null) {
             holder.name.setText(server.getName());
             holder.gain.setText("+" + server.getGain() + "/сек");
             holder.price.setText("Купить за: " + server.getPrice());

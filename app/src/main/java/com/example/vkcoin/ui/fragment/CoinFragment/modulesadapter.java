@@ -20,6 +20,7 @@ public class modulesadapter extends RecyclerView.Adapter<modulesadapter.ViewHold
     FragmentActivity activity;
     CPUmodel cpu;
     ServerModel server;
+
     public modulesadapter(FragmentActivity activity) {
         this.activity = activity;
     }
@@ -39,15 +40,15 @@ public class modulesadapter extends RecyclerView.Adapter<modulesadapter.ViewHold
             holder.name.setText(cpu.getName());
             holder.gain.setText("+" + cpu.getGain() + "/сек");
             holder.price.setText("x" + cpu.getQuantity());
-            holder.itemView.setOnClickListener(v -> {
-                Log.e("TEST0", "Click " + cpu);
-                UpgradeRepository.getInstance(activity).buyCPU(cpu);
-            });
+//            holder.itemView.setOnClickListener(v -> {
+//                Log.e("TEST0", "Click " + cpu);
+//                UpgradeRepository.getInstance(activity).buyCPU(cpu);
+//            });
         } else if(position == 1 && server != null) {
             holder.name.setText(server.getName());
             holder.gain.setText("+" + server.getGain() + "/сек");
             holder.price.setText("x" + server.getQuantity());
-            holder.itemView.setOnClickListener(v -> UpgradeRepository.getInstance(activity).buyServer(server));
+            //holder.itemView.setOnClickListener(v -> UpgradeRepository.getInstance(activity).buyServer(server));
         }
     }
 

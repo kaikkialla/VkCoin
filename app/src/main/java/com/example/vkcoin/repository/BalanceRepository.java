@@ -3,6 +3,7 @@ package com.example.vkcoin.repository;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.util.Log;
 
 import com.example.vkcoin.model.CPUmodel;
 import com.example.vkcoin.model.ServerModel;
@@ -61,9 +62,11 @@ public class BalanceRepository {
                     server = u;
                 });
 
+
         b = new float[]{balanceSP.getFloat("balance", 0)};
         final Handler handler = new Handler();
         final Runnable Update = () -> {
+            Log.e("fjaofa", cpu.getGain() + " / " + server.getGain());
             b[0] = b[0] + server.getGain() + cpu.getGain();
 
             balance.onNext(b[0]);
